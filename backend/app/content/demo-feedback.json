@@ -1,0 +1,17 @@
+{
+ "communication_success": "Exemplo demo: a frase curada comunica duas ações. Este conteúdo não avalia sua resposta.",
+ "corrected_answer": "You need to change your password through the official website and report the email to the security team. Do not click the suspicious link again.",
+ "highlighted_change": "need to change",
+ "language_errors": [{"type":"grammar","original":"You need change your password and report the email.","correction":"You need to change your password and report the email.","concept_id":"need-to"}],
+ "professional_feedback":{"status":"not_applicable","explanation":"Sua produção não foi avaliada no demo. No exemplo, instruções claras ajudam sem culpar a pessoa."},
+ "technical_feedback":{"status":"not_applicable","explanation":"Sua produção não foi avaliada. Neste cenário, Alex inseriu a senha: deve trocá-la pelo site oficial acessado independentemente e reportar ao time por canal conhecido."},
+ "quick_explanation":"Em need to change, need expressa necessidade. To não significa necessidade: marca o infinitivo e conecta need à ação change.",
+ "deep_explanation":"O padrão é pessoa + need/needs + to + verbo na forma base. Need é o verbo principal; to marca o infinitivo. Em need to [change your password] and [report the email], as duas ações compartilham o mesmo to. Retirar to antes de change quebra esse padrão; trocar need por must exige retirar to, pois must é modal.",
+ "sentence_map":[{"segment":"You","role":"sujeito","meaning":"quem tem a necessidade"},{"segment":"need","role":"verbo principal","meaning":"expressa necessidade"},{"segment":"to","role":"marcador do infinitivo","meaning":"conecta à ação"},{"segment":"change","role":"verbo na forma base","meaning":"ação necessária"},{"segment":"your password","role":"objeto","meaning":"elemento afetado"}],
+ "contrasts":[{"example":"You need help.","label":"comparison","explanation":"Help é substantivo; não pede to."},{"example":"You need to change your password.","label":"correct","explanation":"Change é ação no infinitivo."},{"example":"You must change your password.","label":"comparison","explanation":"Must é modal e não usa to."}],
+ "tech_examples":[{"english":"We need to review the alert.","support_language":"Precisamos revisar o alerta."}],
+ "retrieval_question":{"id":"need-to-1","prompt":"Complete: The analyst needs ___ review the alert and notify the manager.","answer_type":"fill_blank"},
+ "review_items":[{"concept_id":"need-to","reason":"Relembrar a estrutura sem consultar o exemplo.","next_review_days":1}],
+ "confidence_prompt":"Quão confiante você está para usar esta estrutura?",
+ "needs_human_review":true
+}

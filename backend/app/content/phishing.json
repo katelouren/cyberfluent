@@ -1,0 +1,21 @@
+{
+  "slug": "phishing-incident-communication",
+  "title": "Phishing Incident Communication",
+  "path": "Tech English Starter Path",
+  "cefr": ["A1", "A2", "B1"],
+  "role": "IT support analyst",
+  "scenario": "Na empresa fictícia Northstar, Alex recebeu um e-mail suspeito e inseriu sua senha no site indicado. O domínio oficial fictício é northstar.example.",
+  "language_objective": "Orientar com need to + verbo e imperativos profissionais.",
+  "professional_objective": "Dar instruções claras, acolhedoras e acionáveis, sem culpar Alex.",
+  "technical_objective": "Reconhecer pistas e comunicar uma resposta defensiva à exposição de senha.",
+  "vocabulary": [["suspicious", "suspeito"], ["report", "reportar ao canal de segurança"], ["credentials", "credenciais de acesso"], ["trusted channel", "canal confiável"]],
+  "grammar": "person + need/needs + to + base verb",
+  "briefing": "Identifique três pistas e escreva uma orientação de 2 a 4 frases em inglês.",
+  "minigames": ["Spot the Risk"],
+  "rubric": ["Não clicar novamente nem responder ao remetente suspeito.", "Reportar a mensagem ao time de segurança por canal conhecido.", "Como Alex inseriu a senha, orientar troca pelo site oficial acessado independentemente, nunca pelo link do e-mail.", "Não afirmar que há comprometimento confirmado: os sinais são suspeitos.", "Não pedir senhas nem sugerir ações ofensivas."],
+  "accepted_answers": ["Diferentes formulações são aceitas se preservarem as ações da rubrica; não exigir correspondência literal."],
+  "base_explanation": "Em need to change, need expressa necessidade; to é marcador do infinitivo. Need help usa substantivo; must change usa modal sem to. Ações coordenadas podem compartilhar to.",
+  "review_concepts": ["need-to", "defensive-instructions"],
+  "human_review_status": "pending",
+  "source": "Cenário original fictício; revisão humana pendente."
+}
