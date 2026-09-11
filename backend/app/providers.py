@@ -1,0 +1,63 @@
+import json
+import os
+from pathlib import Path
+from typing import Protocol
+
+from openai import AsyncOpenAI
+
+from .schemas import Attempt, Feedback
+
+ROOT = Path(__file__).parent
+MISSION = json.loads((ROOT / "content/phishing.json").read_text())
+PROMPT = (ROOT / "prompts/tutor-v2.txt").read_text()
+
+
+class ProviderUnavailable(Exception):
+    pass
+
+
+class TutorProvider(Protocol):
+    async def feedback(self, attempt: Attempt) -> Feedback: ...
+
+
+class OpenAITutorProvider:
+    async def feedback(self, attempt: Attempt) -> Feedback:
+        if (
+            os.getenv("AI_PROVIDER", "openai") != "openai"
+            or not os.getenv("OPENAI_API_KEY")
+            or not os.getenv("OPENAI_MODEL")
+        ):
+            raise ProviderUnavailable()
+        async with AsyncOpenAI(timeout=35.0, max_retries=0) as client:
+            response = await client.responses.parse(
+                model=os.environ["OPENAI_MODEL"],
+                store=False,
+                max_output_tokens=4500,
+                input=[
+                    {"role": "system", "content": PROMPT},
+                    {
+                        "role": "developer",
+                        "content": json.dumps(
+                            {"mission": MISSION, "history": []}, ensure_ascii=False
+                        ),
+                    },
+                    {
+                        "role": "user",
+                        "content": json.dumps(
+                            attempt.model_dump(exclude={"demo"}), ensure_ascii=False
+                        ),
+                    },
+                ],
+                text_format=Feedback,
+            )
+        if response.status != "completed" or response.output_parsed is None:
+            raise ProviderUnavailable()
+        return Feedback.model_validate(response.output_parsed.model_dump())
+
+
+class DemoTutorProvider:
+    async def feedback(self, attempt: Attempt) -> Feedback:
+        # A curated example, intentionally never presented as analysis of the submission.
+        return Feedback.model_validate(
+            json.loads((ROOT / "content/demo-feedback.json").read_text())
+        )

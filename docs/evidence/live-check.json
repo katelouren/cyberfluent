@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-10T23:09:39.570Z",
+  "scenario": "Two synthetic, nonpersonal phishing instructions",
+  "records": [
+    {
+      "request_id": "2550c3e4-ecd1-4cca-b169-1f0e2d2caee7",
+      "ai_mode": "live",
+      "prompt_version": "tutor-v2",
+      "corrected_answer": "You need to change your password on the official Northstar website, accessed independently, and report the email to the security team through a trusted channel. Do not click the link or reply to the sender.",
+      "quick_explanation": "Depois de need, use to + verbo: need to change. Com duas ações, o segundo to pode ficar compartilhado: need to change and report.",
+      "deep_explanation": "A estrutura é person + need/needs + to + base verb. Em You need to change, you é a pessoa, need expressa necessidade, to marca o infinitivo e change é o verbo na forma base. Em You need to change your password and report the email, o to aparece antes da primeira ação e é compartilhado pela segunda: to change and report. Também seria possível dizer to change your password and to report the email, mas repetir to não é necessário. A orientação técnica deve indicar o site oficial acessado independentemente, porque o link do e-mail pode ser falso. O reporte deve ocorrer por um canal confiável. Need to é uma alternativa de orientação; imperativos profissionais, como Report the email through a trusted channel, também podem ser corretos.",
+      "language_errors": [
+        {
+          "type": "grammar",
+          "original": "You need change your password",
+          "correction": "You need to change your password",
+          "concept_id": "need-to"
+        }
+      ],
+      "technical_feedback": {
+        "status": "partially_correct",
+        "explanation": "Você incluiu a troca da senha e o reporte do e-mail. A resposta original não especifica que a troca deve ocorrer no site oficial acessado independentemente, nem menciona o reporte ao time de segurança por um canal conhecido. Também é importante orientar a não clicar novamente nem responder ao remetente suspeito. Não há afirmação de comprometimento confirmado, pedido de senha ou sugestão ofensiva."
+      },
+      "professional_feedback": {
+        "status": "appropriate",
+        "explanation": "A mensagem é clara, acionável e acolhedora. Ela não culpa a pessoa. A versão recomendada fica mais profissional porque indica o site oficial, um canal confiável e o que não fazer."
+      }
+    },
+    {
+      "request_id": "9fcf2678-4d8f-467b-a717-3c6c1a5807fe",
+      "ai_mode": "live",
+      "prompt_version": "tutor-v2",
+      "corrected_answer": "Hi Alex, please do not use that link again. Change your password on the official website, accessed independently, and report the message to our security team. Do not reply to the sender.",
+      "quick_explanation": "Você comunicou a resposta principal corretamente. Faltou apenas dizer explicitamente para não responder ao remetente e esclarecer que o site oficial deve ser acessado sem usar o link do e-mail.",
+      "deep_explanation": "A estrutura escolhida é o imperativo profissional: please do not use, Change e report. O imperativo usa o verbo na forma base e não precisa de sujeito explícito, porque o sujeito entendido é you. Need to é uma alternativa opcional: You need to change your password and report the message. Nessa frase, need expressa necessidade, to marca o infinitivo e o segundo verbo pode compartilhar o mesmo to: need to change and report. Em “Change your password ... and report the message”, os dois verbos coordenados são imperativos; por isso, não há to antes deles.",
+      "language_errors": [],
+      "technical_feedback": {
+        "status": "partially_correct",
+        "explanation": "A mensagem cobre não usar novamente o link, trocar a senha no site oficial e reportar a mensagem ao time de segurança. Porém, não diz explicitamente para não responder ao remetente. Também é melhor deixar explícito que o site oficial deve ser acessado independentemente, e não pelo link do e-mail. Você não afirma comprometimento confirmado, não pede a senha e não sugere ações ofensivas."
+      },
+      "professional_feedback": {
+        "status": "appropriate",
+        "explanation": "O tom é profissional, direto e acolhedor. Os imperativos “please do not use”, “Change” e “report” são alternativas válidas a “need to” neste contexto."
+      }
+    }
+  ],
+  "configured_model": "gpt-5.6-luna",
+  "validation": {
+    "browser_to_fastapi_to_openai": true,
+    "http_statuses": [
+      200,
+      200
+    ],
+    "structured_output_validated": true,
+    "fallback_enabled": false,
+    "different_feedback": true,
+    "recall_completed": true,
+    "test_duration_seconds": 44.0
+  }
+}
