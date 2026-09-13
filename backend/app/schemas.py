@@ -1,11 +1,21 @@
-from typing import Literal
+import unicodedata
+from typing import Annotated, Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class StrictModel(BaseModel):
-    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True, str_max_length=4000)
+
+    @field_validator("*", mode="after")
+    @classmethod
+    def text_controls(cls, value):
+        if isinstance(value, str) and any(
+            unicodedata.category(c) == "Cc" and c not in "\n\t" for c in value
+        ):
+            raise ValueError("Texto contém caracteres de controle.")
+        return value
 
 
 class Attempt(StrictModel):
@@ -68,16 +78,16 @@ class Feedback(StrictModel):
     communication_success: str
     corrected_answer: str
     highlighted_change: str
-    language_errors: list[LanguageError]
+    language_errors: list[LanguageError] = Field(max_length=20)
     professional_feedback: Professional
     technical_feedback: Technical
     quick_explanation: str
     deep_explanation: str
-    sentence_map: list[Segment]
-    contrasts: list[Contrast]
-    tech_examples: list[Example]
+    sentence_map: list[Segment] = Field(max_length=20)
+    contrasts: list[Contrast] = Field(max_length=20)
+    tech_examples: list[Example] = Field(max_length=20)
     retrieval_question: Retrieval
-    review_items: list[Review]
+    review_items: list[Review] = Field(max_length=20)
     confidence_prompt: str
     needs_human_review: bool
 
@@ -94,7 +104,7 @@ class RecallAnswer(StrictModel):
     question_id: Literal["need-to-1", "future-will", "modal-should"]
     attempt_id: UUID | None = None
     review_id: UUID | None = None
-    confidence: int = Field(default=3, ge=1, le=5)
+    confidence: int = Field(default=3, ge=1, le=5, strict=True)
     answer: str = Field(min_length=1, max_length=200)
 
 
@@ -111,12 +121,15 @@ class Profile(StrictModel):
 class GameAnswer(StrictModel):
     mission_slug: Literal["phishing-incident-communication", "daily-standup", "bug-report"]
     game_id: str = Field(min_length=1, max_length=30)
-    answers: list[str] = Field(max_length=10)
+    answers: list[Annotated[str, Field(min_length=1, max_length=64)]] = Field(max_length=10)
 
 
 class StartAttempt(StrictModel):
     mission_slug: Literal["phishing-incident-communication", "daily-standup", "bug-report"]
-    games: dict[str, list[str]]
+    games: dict[
+        Annotated[str, Field(min_length=1, max_length=30)],
+        Annotated[list[Annotated[str, Field(min_length=1, max_length=64)]], Field(max_length=10)],
+    ] = Field(max_length=2)
 
 
 class CompanionAnswer(StrictModel):
