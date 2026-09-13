@@ -1,0 +1,77 @@
+{
+  "communication_success": "Exemplo demo: a frase curada comunica duas ações. Este conteúdo não avalia sua resposta.",
+  "corrected_answer": "Click Save. The app should save the task, but it shows Error 500. After refreshing, the task is missing. Users cannot record their work.",
+  "highlighted_change": "should save",
+  "language_errors": [
+    {
+      "type": "grammar",
+      "original": "The app should saves the task.",
+      "correction": "The app should save the task.",
+      "concept_id": "modal-should"
+    }
+  ],
+  "professional_feedback": {
+    "status": "not_applicable",
+    "explanation": "Sua produção não foi avaliada no demo. No exemplo, instruções claras ajudam sem culpar a pessoa."
+  },
+  "technical_feedback": {
+    "status": "not_applicable",
+    "explanation": "Exemplo curado. Não avaliamos sua produção nem afirmamos uma causa não observada."
+  },
+  "quick_explanation": "Depois de should, use verbo base: should save. Este é um exemplo curado, não uma avaliação da sua produção.",
+  "deep_explanation": "Should é modal: não recebe to nem flexão no verbo seguinte. O relato compara o esperado com a observação sem afirmar uma causa técnica não demonstrada.",
+  "sentence_map": [
+    {
+      "segment": "The app",
+      "role": "sujeito",
+      "meaning": "sistema observado"
+    },
+    {
+      "segment": "should",
+      "role": "modal",
+      "meaning": "comportamento esperado"
+    },
+    {
+      "segment": "save",
+      "role": "verbo base",
+      "meaning": "ação esperada"
+    }
+  ],
+  "contrasts": [
+    {
+      "example": "The app should save the task.",
+      "label": "correct",
+      "explanation": "Modal + verbo base."
+    },
+    {
+      "example": "The app saves tasks.",
+      "label": "comparison",
+      "explanation": "Presente simples em uma afirmação habitual."
+    },
+    {
+      "example": "The app should saves the task.",
+      "label": "common_error",
+      "explanation": "Não flexionar o verbo depois do modal."
+    }
+  ],
+  "tech_examples": [
+    {
+      "english": "Click Save. The app should save the task, but it shows Error 500. After refreshing, the task is missing. Users cannot record their work.",
+      "support_language": "Exemplo de comunicação profissional no cenário fictício."
+    }
+  ],
+  "retrieval_question": {
+    "id": "need-to-1",
+    "prompt": "Complete: The analyst needs ___ review the alert and notify the manager.",
+    "answer_type": "fill_blank"
+  },
+  "review_items": [
+    {
+      "concept_id": "modal-should",
+      "reason": "Recuperar a forma verbal sem consultar o exemplo.",
+      "next_review_days": 1
+    }
+  ],
+  "confidence_prompt": "Quão confiante você está para usar esta estrutura?",
+  "needs_human_review": true
+}

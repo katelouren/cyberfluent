@@ -1,11 +1,11 @@
 import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests",
-  testIgnore: "**/live/**",
+  testIgnore: ["**/live/**", "**/database/**"],
   fullyParallel: false,
   workers: 1,
   timeout: 60000,
-  use: { baseURL: "http://localhost:3100", trace: "retain-on-failure" },
+  use: { baseURL: "http://localhost:3100", trace: "off" },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: [
     {

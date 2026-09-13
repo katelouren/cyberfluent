@@ -22,7 +22,7 @@ export default function Home() {
             <Link className="button primary" href={missionUrl}>
               {messages.start} <span aria-hidden="true">↗</span>
             </Link>
-            <Link className="text-link" href="#trilha">
+            <Link className="text-link" href="/trilhas">
               {messages.explore} ↓
             </Link>
           </div>
@@ -48,13 +48,13 @@ export default function Home() {
         <div>
           <p className="eyebrow">SEU PRÓXIMO PASSO</p>
           <h2>
-            Uma missão.
+            Três missões.
             <br />
             Inglês com propósito.
           </h2>
           <p>Tech English Starter Path</p>
           <p className="muted">
-            A primeira missão está disponível nesta fase.
+            Daily Standup, Bug Report e Phishing Incident Communication.
             <br />
             Apoio em português · prática em inglês · A1–B1
           </p>
@@ -64,7 +64,7 @@ export default function Home() {
             <span className="mission-symbol" aria-hidden="true">
               ⌁
             </span>
-            <span className="badge">DISPONÍVEL · FASE 1</span>
+            <span className="badge">DISPONÍVEL · A1–B1</span>
           </div>
           <h3>
             Phishing Incident

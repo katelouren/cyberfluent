@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { brand, missionUrl } from "@/config/brand";
 import "./globals.css";
+import { SessionProvider, SessionNavigation } from "@/components/session";
 
 export const metadata: Metadata = {
   title: `${brand.name} — ${brand.tagline}`,
@@ -16,35 +17,42 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
-        <a className="skip" href="#main">
-          Pular para conteúdo
-        </a>
-        <header className="header">
-          <Link className="brand" href="/" aria-label={`${brand.name} início`}>
-            <span className="brand-icon" aria-hidden="true">
-              c/f
-            </span>
-            {brand.name}
-          </Link>
-          <nav aria-label="Principal">
-            <Link href="/#trilha">A missão</Link>
-            <Link href="/#metodo">Como funciona</Link>
-            <Link className="nav-cta" href={missionUrl}>
-              Entrar na missão <span aria-hidden="true">↗</span>
+        <SessionProvider>
+          <a className="skip" href="#main">
+            Pular para conteúdo
+          </a>
+          <header className="header">
+            <Link
+              className="brand"
+              href="/"
+              aria-label={`${brand.name} início`}
+            >
+              <span className="brand-icon" aria-hidden="true">
+                c/f
+              </span>
+              {brand.name}
             </Link>
-          </nav>
-        </header>
-        {children}
-        <footer>
-          <div>
-            <strong>{brand.name}</strong>
-            <span>{brand.tagline}</span>
-          </div>
-          <p>{brand.disclaimer}</p>
-          <small>
-            Fase 1 · Experiência local · Conteúdo com revisão humana pendente
-          </small>
-        </footer>
+            <nav aria-label="Principal">
+              <SessionNavigation />
+              <Link href="/#trilha">A missão</Link>
+              <Link href="/#metodo">Como funciona</Link>
+              <Link className="nav-cta" href={missionUrl}>
+                Entrar na missão <span aria-hidden="true">↗</span>
+              </Link>
+            </nav>
+          </header>
+          {children}
+          <footer>
+            <div>
+              <strong>{brand.name}</strong>
+              <span>{brand.tagline}</span>
+            </div>
+            <p>{brand.disclaimer}</p>
+            <small>
+              Missões originais · Conteúdo com revisão humana pendente
+            </small>
+          </footer>
+        </SessionProvider>
       </body>
     </html>
   );

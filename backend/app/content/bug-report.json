@@ -1,0 +1,56 @@
+{
+  "path": "Tech English Starter Path",
+  "cefr": [
+    "A1",
+    "A2",
+    "B1"
+  ],
+  "human_review_status": "pending",
+  "source": "Cenário original fictício; revisão humana pendente.",
+  "slug": "bug-report",
+  "title": "Bug Report",
+  "role": "QA analyst",
+  "scenario": "No aplicativo fictício Northstar Tasks, clicar em Save deveria salvar a tarefa. Em vez disso, a tela mostra Error 500 e a tarefa não aparece após atualizar. Isso impede o registro do trabalho.",
+  "briefing": "Escreva um relato de 3 a 5 frases com reprodução, comportamento esperado, observado e impacto.",
+  "language_objective": "Contrastar expected e actual usando should + verbo base.",
+  "professional_objective": "Escrever um relato reproduzível sem atribuir culpa ou inventar a causa.",
+  "technical_objective": "Separar observação de hipótese.",
+  "vocabulary": [
+    [
+      "expected",
+      "esperado"
+    ],
+    [
+      "actual",
+      "observado"
+    ],
+    [
+      "reproduce",
+      "reproduzir"
+    ],
+    [
+      "impact",
+      "impacto"
+    ]
+  ],
+  "grammar": "The app should + base verb, but it + observed behavior.",
+  "worked_example": "The button should open the menu, but it shows a blank screen. Users cannot access the settings.",
+  "base_explanation": "Should expressa comportamento esperado e recebe verbo base, sem to. But introduz o contraste.",
+  "rubric": [
+    "Descrever clicar em Save como passo de reprodução.",
+    "Informar que o esperado é salvar a tarefa.",
+    "Relatar Error 500 e ausência da tarefa após atualizar como observações.",
+    "Explicar o impacto: trabalho não pode ser registrado.",
+    "Não inventar a causa técnica, culpar um colega ou recomendar ações destrutivas."
+  ],
+  "accepted_answers": [
+    "Aceitar relatos que preservem as observações e o impacto, mesmo sem usar should."
+  ],
+  "review_concepts": [
+    "modal-should"
+  ],
+  "minigames": [
+    "Bug Report Builder",
+    "Choose Your Response"
+  ]
+}

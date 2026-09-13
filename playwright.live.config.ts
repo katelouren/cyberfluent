@@ -1,13 +1,18 @@
 import { defineConfig, devices } from "@playwright/test";
-// Opt-in: two real API requests, using only server-side local credentials.
+// Opt-in: three real AI requests and hosted Supabase authentication/persistence.
 export default defineConfig({
   testDir: "./tests/live",
   workers: 1,
-  timeout: 150000,
+  timeout: 300000,
+  expect: { timeout: 20000 },
+  reporter: "line",
+
   use: {
     ...devices["Desktop Chrome"],
     baseURL: "http://localhost:3100",
     trace: "off",
+    screenshot: "off",
+    video: "off",
   },
   webServer: [
     {
