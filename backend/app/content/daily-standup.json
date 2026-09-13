@@ -1,0 +1,56 @@
+{
+  "path": "Tech English Starter Path",
+  "cefr": [
+    "A1",
+    "A2",
+    "B1"
+  ],
+  "human_review_status": "pending",
+  "source": "Cenário original fictício; revisão humana pendente.",
+  "slug": "daily-standup",
+  "title": "Daily Standup",
+  "role": "Software developer",
+  "scenario": "Na Northstar, ontem você corrigiu o bug de login. Hoje vai escrever testes. Falta acesso ao ambiente de staging e você precisa de ajuda da equipe.",
+  "briefing": "Comunique andamento, próximo passo e bloqueio em 2 a 4 frases em inglês.",
+  "language_objective": "Organizar passado, plano atual e pedido de ajuda.",
+  "professional_objective": "Informar o bloqueio de modo específico e colaborativo.",
+  "technical_objective": null,
+  "vocabulary": [
+    [
+      "fixed",
+      "corrigi"
+    ],
+    [
+      "blocker",
+      "impedimento"
+    ],
+    [
+      "staging",
+      "ambiente de homologação"
+    ],
+    [
+      "access",
+      "acesso"
+    ]
+  ],
+  "grammar": "Yesterday, I + past verb. Today, I will + base verb. I am blocked by ...",
+  "worked_example": "Yesterday, I updated the documentation. Today, I will review the tests. I need access to the repository.",
+  "base_explanation": "Yesterday sinaliza passado; will recebe verbo base e comunica o próximo passo.",
+  "rubric": [
+    "Informar que corrigiu o bug de login ontem.",
+    "Dizer que hoje vai escrever testes.",
+    "Explicitar que falta acesso ao staging e pedir ajuda de modo profissional.",
+    "Não inventar métricas, causa técnica ou atividades concluídas.",
+    "Aceitar alternativas gramaticais naturais e não exigir will se outra estrutura comunicar o plano corretamente."
+  ],
+  "accepted_answers": [
+    "Avaliar significado e intenção, não correspondência literal."
+  ],
+  "review_concepts": [
+    "future-will"
+  ],
+  "minigames": [
+    "Build the Message",
+    "Choose Your Response"
+  ]
+}

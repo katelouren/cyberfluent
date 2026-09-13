@@ -1,0 +1,32 @@
+{
+  "date": "2026-09-11T18:58:39.829431+00:00",
+  "configured_model": "gpt-5.6-luna",
+  "prompt_version": "tutor-v3",
+  "scope": "provider only; no Supabase, JWT or browser integration proven by this check",
+  "records": [
+    {
+      "mission": "daily-standup",
+      "structured_output_validated": true,
+      "input_excerpt_cited": true,
+      "language_error_count": 1,
+      "professional_status": "appropriate",
+      "technical_status": "not_applicable"
+    },
+    {
+      "mission": "bug-report",
+      "structured_output_validated": true,
+      "input_excerpt_cited": true,
+      "language_error_count": 1,
+      "professional_status": "appropriate",
+      "technical_status": "correct"
+    },
+    {
+      "mission": "phishing-incident-communication",
+      "structured_output_validated": true,
+      "input_excerpt_cited": true,
+      "language_error_count": 1,
+      "professional_status": "partially_appropriate",
+      "technical_status": "partially_correct"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { sessionHeaders } from "./supabase";
 const text = z.string();
 export const envelopeSchema = z.object({
   ai_mode: z.enum(["live", "demo"]),
@@ -79,32 +80,118 @@ export class ApiError extends Error {
     super(message);
   }
 }
-export async function requestFeedback(
-  answer: string,
-  cefr: string,
-  demo = false,
-): Promise<Envelope> {
-  const response = await fetch(`${apiUrl}/api/v1/tutor/feedback`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    signal: AbortSignal.timeout(45000),
-    body: JSON.stringify({
-      mission_slug: "phishing-incident-communication",
-      answer,
-      cefr,
-      source_locale: "pt-BR",
-      target_locale: "en",
-      demo,
-    }),
+export async function api<T = unknown>(
+  path: string,
+  body?: unknown,
+): Promise<T> {
+  const response = await fetch(`${apiUrl}/api/v1/${path}`, {
+    method: body === undefined ? "GET" : "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(await sessionHeaders()),
+    },
+    cache: "no-store",
+    signal: AbortSignal.timeout(path.includes("tutor") ? 45000 : 15000),
+    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
   });
   if (!response.ok) {
     const data = await response.json().catch(() => null);
     throw new ApiError(
       typeof data?.detail === "string"
         ? data.detail
-        : data?.detail?.message || "IA indisponível. Tente novamente.",
+        : data?.detail?.message || "Serviço indisponível. Tente novamente.",
       data?.detail?.demo_available === true,
     );
   }
-  return envelopeSchema.parse(await response.json());
+  return response.json();
 }
+export async function requestFeedback(
+  answer: string,
+  cefr: string,
+  demo = false,
+  mission_slug = "phishing-incident-communication",
+  attempt_id?: string,
+): Promise<Envelope> {
+  return envelopeSchema.parse(
+    await api("tutor/feedback", {
+      answer,
+      cefr,
+      demo,
+      mission_slug,
+      attempt_id,
+      source_locale: "pt-BR",
+      target_locale: "en",
+    }),
+  );
+}
+export const gameSchema = z.object({
+  id: text,
+  type: z.enum(["order", "select_many", "single", "classify"]),
+  title: text,
+  prompt: text,
+  options: z.array(z.object({ id: text, text })),
+  labels: z.array(text).optional(),
+});
+export const missionSchema = z.object({
+  slug: text,
+  title: text,
+  scenario: text,
+  briefing: text,
+  language_objective: text,
+  professional_objective: text,
+  vocabulary: z.array(z.tuple([text, text])),
+  grammar: text,
+  worked_example: text,
+  base_explanation: text,
+  games: z.array(gameSchema),
+  position: z.number(),
+});
+export type Mission = z.infer<typeof missionSchema>;
+export type Game = z.infer<typeof gameSchema>;
+export const profileSchema = z.object({
+  source_locale: z.literal("pt-BR"),
+  target_locale: z.literal("en"),
+  cefr: z.enum(["A1", "A2", "B1"]),
+  area: z.enum(["development", "security", "support", "other"]),
+  role: text,
+  goal: text,
+  daily_minutes: z.union([
+    z.literal(5),
+    z.literal(10),
+    z.literal(15),
+    z.literal(20),
+    z.literal(30),
+  ]),
+});
+export type Profile = z.infer<typeof profileSchema>;
+export const progressSchema = z.object({
+  missions: z.array(
+    z.object({
+      mission_slug: text,
+      context_xp: z.number(),
+      language_xp: z.number(),
+      communication_xp: z.number(),
+      completed_at: text,
+    }),
+  ),
+  competencies: z.object({
+    context_xp: z.number(),
+    language_xp: z.number(),
+    communication_xp: z.number(),
+  }),
+  total_xp: z.number(),
+  readiness: text,
+  mode: z.enum(["live", "demo"]),
+});
+export const queueSchema = z.array(
+  z.object({
+    id: text,
+    mission_slug: text,
+    concept_id: text,
+    due_at: text,
+    interval_days: z.number(),
+    reason: text,
+    due: z.boolean(),
+    question: z.object({ id: text, prompt: text, answer_type: text }),
+  }),
+);

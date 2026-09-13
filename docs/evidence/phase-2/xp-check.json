@@ -1,0 +1,21 @@
+{
+  "date": "2026-09-13T01:03:08.519923+00:00",
+  "scope": "FastAPI ASGI with real JWT and hosted Supabase; account B",
+  "checks": {
+    "real_login_b": true,
+    "three_persisted_missions": true,
+    "competency_xp": true,
+    "no_duplicate_xp_daily-standup": true,
+    "no_duplicate_xp_bug-report": true,
+    "no_duplicate_xp_phishing-incident-communication": true,
+    "progress_unchanged_after_replay": true,
+    "client_xp_write_denied": true,
+    "client_reward_rpc_denied": true
+  },
+  "competencies": {
+    "context_xp": 60,
+    "language_xp": 60,
+    "communication_xp": 60
+  },
+  "total_xp": 180
+}

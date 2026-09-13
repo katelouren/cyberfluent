@@ -7,10 +7,13 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app import main, providers
+from app.auth import Identity, current_user
 from app.schemas import Feedback
+from app.storage import DemoStore, _demo_data
 
 PAYLOAD = {
     "mission_slug": "phishing-incident-communication",
+    "attempt_id": "00000000-0000-4000-8000-000000000099",
     "answer": "You need change your password and report the email.",
 }
 
@@ -21,6 +24,25 @@ def settings(monkeypatch):
     monkeypatch.delenv("OPENAI_MODEL", raising=False)
     monkeypatch.setenv("AI_DEMO_FALLBACK_ENABLED", "true")
     main.requests_window.clear()
+    identity = Identity("00000000-0000-4000-8000-000000000001", "unit-test-token")
+    _demo_data.clear()
+    store = DemoStore(identity)
+    store.data["profile"] = {
+        "cefr": "A2",
+        "source_locale": "pt-BR",
+        "target_locale": "en",
+        "role": "IT support",
+    }
+    store.data["attempts"][PAYLOAD["attempt_id"]] = {
+        "id": PAYLOAD["attempt_id"],
+        "mission_slug": PAYLOAD["mission_slug"],
+        "recalled": False,
+        "feedback": None,
+    }
+    main.app.dependency_overrides[current_user] = lambda: identity
+    monkeypatch.setattr(main, "get_store", lambda user: store)
+    yield
+    main.app.dependency_overrides.clear()
 
 
 @pytest.fixture
@@ -78,13 +100,25 @@ def test_body_limit(client):
 def test_recall(client):
     assert (
         client.post(
-            "/api/v1/review/answer", json={"question_id": "need-to-1", "answer": "must"}
+            "/api/v1/review/answer",
+            json={
+                "question_id": "need-to-1",
+                "answer": "must",
+                "attempt_id": PAYLOAD["attempt_id"],
+                "demo": True,
+            },
         ).json()["correct"]
         is False
     )
     assert (
         client.post(
-            "/api/v1/review/answer", json={"question_id": "need-to-1", "answer": " TO "}
+            "/api/v1/review/answer",
+            json={
+                "question_id": "need-to-1",
+                "answer": " TO ",
+                "attempt_id": PAYLOAD["attempt_id"],
+                "demo": True,
+            },
         ).json()["correct"]
         is True
     )
@@ -104,7 +138,7 @@ def test_cors(client):
 
 
 def test_rate_limit(client):
-    for _ in range(20):
+    for _ in range(60):
         client.post("/api/v1/review/answer", json={"question_id": "need-to-1", "answer": "to"})
     assert (
         client.post(

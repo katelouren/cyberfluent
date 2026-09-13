@@ -1,0 +1,36 @@
+{
+  "date": "2026-09-13T01:17:14.992Z",
+  "complete": true,
+  "primary_account": "A",
+  "competency_xp_valid": true,
+  "persisted_review_queue": true,
+  "records": [
+    {
+      "mission": "daily-standup",
+      "http_status": 200,
+      "ai_mode": "live",
+      "prompt_version": "tutor-v3",
+      "request_id": "988257a8-f992-4552-9828-49fbfd9d91ad",
+      "language_error_count": 1
+    },
+    {
+      "mission": "bug-report",
+      "http_status": 200,
+      "ai_mode": "live",
+      "prompt_version": "tutor-v3",
+      "request_id": "3afcbe44-6a1f-4335-884d-0013b950b93a",
+      "language_error_count": 1
+    },
+    {
+      "mission": "phishing-incident-communication",
+      "http_status": 200,
+      "ai_mode": "live",
+      "prompt_version": "tutor-v3",
+      "request_id": "a809c1ed-c72a-4c7f-9bb1-15aac6408581",
+      "language_error_count": 2
+    }
+  ],
+  "supabase_rls_isolation": true,
+  "persisted_progress": true,
+  "recall_completed": true
+}

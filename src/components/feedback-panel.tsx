@@ -1,9 +1,22 @@
 "use client";
 import { useState } from "react";
-import { apiUrl, type Envelope } from "@/lib/api";
+import { api, type Envelope } from "@/lib/api";
+import Link from "next/link";
 import { messages } from "@/messages/pt-BR";
-export function FeedbackPanel({ result }: { result: Envelope }) {
+export function FeedbackPanel({
+  result,
+  attemptId,
+  missionSlug,
+  onCompleted,
+}: {
+  result: Envelope;
+  attemptId: string;
+  missionSlug: string;
+  onCompleted: () => void;
+}) {
   const f = result.feedback;
+  const [confidence, setConfidence] = useState(3);
+  const [xp, setXp] = useState(0);
   const [recall, setRecall] = useState(false),
     [answer, setAnswer] = useState(""),
     [status, setStatus] = useState(""),
@@ -13,19 +26,18 @@ export function FeedbackPanel({ result }: { result: Envelope }) {
     e.preventDefault();
     setBusy(true);
     try {
-      const r = await fetch(`${apiUrl}/api/v1/review/answer`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        signal: AbortSignal.timeout(10000),
-        body: JSON.stringify({ question_id: f.retrieval_question.id, answer }),
+      const data = await api<{
+        correct: boolean;
+        explanation: string;
+        xp_awarded: number;
+      }>("review/answer", {
+        question_id: f.retrieval_question.id,
+        answer,
+        attempt_id: attemptId,
+        confidence,
+        demo: result.ai_mode === "demo",
       });
-      if (!r.ok) throw new Error();
-      const data = await r.json();
-      if (
-        typeof data.correct !== "boolean" ||
-        typeof data.explanation !== "string"
-      )
-        throw new Error();
+      setXp(data.xp_awarded);
       setStatus(data.explanation);
       setDone(data.correct);
     } catch {
@@ -158,13 +170,37 @@ export function FeedbackPanel({ result }: { result: Envelope }) {
             <div className="success">
               <h3>Prática concluída ✓</h3>
               <p>
+                {result.ai_mode === "demo"
+                  ? "Demonstração concluída, sem XP real."
+                  : `+${xp} XP por competências demonstradas.`}
+              </p>
+              <Link className="button" href="/progresso">
+                Ver progresso
+              </Link>
+              <Link className="button" href="/revisao">
+                Minha revisão
+              </Link>
+              {missionSlug === "phishing-incident-communication" && (
+                <Link className="button primary" href="/academy-companion">
+                  Continuar no English Readiness →
+                </Link>
+              )}
+              <button className="button" onClick={onCompleted}>
+                Iniciar nova produção
+              </button>
+              <p>
                 Você recuperou a estrutura sem a resposta visível. Retome o
                 conceito amanhã.
               </p>
             </div>
           )}
           <label htmlFor="confidence">{f.confidence_prompt}</label>
-          <select id="confidence" defaultValue="3">
+          <select
+            id="confidence"
+            value={confidence}
+            disabled={done || busy}
+            onChange={(e) => setConfidence(Number(e.target.value))}
+          >
             {[1, 2, 3, 4, 5].map((n) => (
               <option key={n} value={n}>
                 {n} / 5
@@ -177,7 +213,8 @@ export function FeedbackPanel({ result }: { result: Envelope }) {
             ))}
           </select>
           <p className="muted">
-            Reflexão desta sessão; sem registro persistente.
+            A confiança orienta o intervalo da próxima revisão. Escolha antes de
+            verificar.
           </p>
           <button className="text-link" onClick={() => setRecall(false)}>
             Consultar explicação novamente

@@ -5,11 +5,12 @@ from typing import Protocol
 
 from openai import AsyncOpenAI
 
+from .catalog import MISSIONS, retrieval
 from .schemas import Attempt, Feedback
 
 ROOT = Path(__file__).parent
 MISSION = json.loads((ROOT / "content/phishing.json").read_text())
-PROMPT = (ROOT / "prompts/tutor-v2.txt").read_text()
+PROMPT = (ROOT / "prompts/tutor-v3.txt").read_text()
 
 
 class ProviderUnavailable(Exception):
@@ -17,11 +18,11 @@ class ProviderUnavailable(Exception):
 
 
 class TutorProvider(Protocol):
-    async def feedback(self, attempt: Attempt) -> Feedback: ...
+    async def feedback(self, attempt: Attempt, context: dict | None = None) -> Feedback: ...
 
 
 class OpenAITutorProvider:
-    async def feedback(self, attempt: Attempt) -> Feedback:
+    async def feedback(self, attempt: Attempt, context: dict | None = None) -> Feedback:
         if (
             os.getenv("AI_PROVIDER", "openai") != "openai"
             or not os.getenv("OPENAI_API_KEY")
@@ -38,13 +39,19 @@ class OpenAITutorProvider:
                     {
                         "role": "developer",
                         "content": json.dumps(
-                            {"mission": MISSION, "history": []}, ensure_ascii=False
+                            {
+                                "mission": MISSIONS[attempt.mission_slug],
+                                "retrieval_question": retrieval(attempt.mission_slug),
+                                "context": context or {"history": []},
+                            },
+                            ensure_ascii=False,
                         ),
                     },
                     {
                         "role": "user",
                         "content": json.dumps(
-                            attempt.model_dump(exclude={"demo"}), ensure_ascii=False
+                            attempt.model_dump(mode="json", exclude={"demo", "attempt_id"}),
+                            ensure_ascii=False,
                         ),
                     },
                 ],
@@ -56,8 +63,18 @@ class OpenAITutorProvider:
 
 
 class DemoTutorProvider:
-    async def feedback(self, attempt: Attempt) -> Feedback:
+    async def feedback(self, attempt: Attempt, context: dict | None = None) -> Feedback:
         # A curated example, intentionally never presented as analysis of the submission.
         return Feedback.model_validate(
-            json.loads((ROOT / "content/demo-feedback.json").read_text())
+            json.loads(
+                (
+                    ROOT
+                    / "content"
+                    / (
+                        "demo-feedback.json"
+                        if attempt.mission_slug == "phishing-incident-communication"
+                        else f"demo-{attempt.mission_slug}.json"
+                    )
+                ).read_text()
+            )
         )

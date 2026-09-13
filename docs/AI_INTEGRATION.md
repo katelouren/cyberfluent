@@ -47,3 +47,19 @@ Esta prova confirma o funcionamento observado, não garante precisão universal 
 ## Demo e limites
 
 `AI_DEMO_FALLBACK_ENABLED=true` permite o botão de demo apenas após falha live. A ação exige clique consciente. O exemplo é fixo, identificado como demo e não avalia a escrita do aluno; adequação profissional e técnica usam `not_applicable`. Em produção autenticada futura, a autorização de uso/custo e limites por usuário precisarão ser acrescentados.
+
+## Evolução da Fase 2 (11/09/2026)
+
+O registro acima é histórico e permanece como prova da Fase 1. O código atual usa `tutor-v3`, catálogo de três missões, perfil e categorias do histórico. O endpoint live passou a exigir JWT Supabase e tentativa do próprio usuário; a recuperação registra progresso transacional.
+
+O teste atual `npm run test:live` exige o setup da Fase 2 e escreve apenas em `docs/evidence/phase-2/`. Não sobrescreve o registro histórico acima. Situação da nova prova em [PHASE_2_VALIDATION](PHASE_2_VALIDATION.md). Um teste isolado do provider, quando executado, é registrado separadamente e não substitui o fluxo autenticado.
+
+
+### Validação integrada de 12/09/2026
+
+As três missões passaram no navegador com a conta B, FastAPI e OpenAI reais (`ai_mode=live`), com progresso e XP persistidos no Supabase. A conta A retornou `invalid_credentials`, impedindo o teste A/B. Consulte [PHASE_2_VALIDATION.md](PHASE_2_VALIDATION.md) para resultados, escopo e pendências; não considerar o aceite completo.
+
+
+### Conclusão da prova integrada — 12/09/2026, 22:17 de Brasília
+
+Após corrigir A, a suíte live passou (1 teste, 1,1 minuto): três missões autenticadas, HTTP 200 e `ai_mode=live`, progresso persistente e isolamento Supabase. Mais 35 verificações confirmaram isolamento A/B nos dois sentidos e autorização de recursos no FastAPI. Evidências e limites em [PHASE_2_VALIDATION.md](PHASE_2_VALIDATION.md). O bloqueio de credenciais registrado acima foi resolvido; revisão da usuária permanece pendente.

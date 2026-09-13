@@ -1,0 +1,77 @@
+{
+  "communication_success": "Exemplo demo: a frase curada comunica duas ações. Este conteúdo não avalia sua resposta.",
+  "corrected_answer": "Yesterday, I fixed the login bug. Today, I will write tests. I need access to staging. Could you help me?",
+  "highlighted_change": "will write",
+  "language_errors": [
+    {
+      "type": "grammar",
+      "original": "Today, I will writing tests.",
+      "correction": "Today, I will write tests.",
+      "concept_id": "future-will"
+    }
+  ],
+  "professional_feedback": {
+    "status": "not_applicable",
+    "explanation": "Sua produção não foi avaliada no demo. No exemplo, instruções claras ajudam sem culpar a pessoa."
+  },
+  "technical_feedback": {
+    "status": "not_applicable",
+    "explanation": "Exemplo curado. Não avaliamos sua produção nem afirmamos uma causa não observada."
+  },
+  "quick_explanation": "Depois de will, use o verbo base: will write. Este é um exemplo curado, não uma avaliação da sua produção.",
+  "deep_explanation": "Will comunica o plano e recebe o verbo base, sem flexão em -ing. Yesterday situa a ação anterior no passado. Um bloqueio específico permite pedir ajuda.",
+  "sentence_map": [
+    {
+      "segment": "I",
+      "role": "sujeito",
+      "meaning": "quem age"
+    },
+    {
+      "segment": "will",
+      "role": "auxiliar",
+      "meaning": "plano futuro"
+    },
+    {
+      "segment": "write",
+      "role": "verbo base",
+      "meaning": "ação planejada"
+    }
+  ],
+  "contrasts": [
+    {
+      "example": "I will write tests.",
+      "label": "correct",
+      "explanation": "Will + verbo base."
+    },
+    {
+      "example": "I am writing tests.",
+      "label": "comparison",
+      "explanation": "Ação em andamento."
+    },
+    {
+      "example": "I will writing tests.",
+      "label": "common_error",
+      "explanation": "Não usar -ing imediatamente após will."
+    }
+  ],
+  "tech_examples": [
+    {
+      "english": "Yesterday, I fixed the login bug. Today, I will write tests. I need access to staging. Could you help me?",
+      "support_language": "Exemplo de comunicação profissional no cenário fictício."
+    }
+  ],
+  "retrieval_question": {
+    "id": "need-to-1",
+    "prompt": "Complete: The analyst needs ___ review the alert and notify the manager.",
+    "answer_type": "fill_blank"
+  },
+  "review_items": [
+    {
+      "concept_id": "future-will",
+      "reason": "Recuperar a forma verbal sem consultar o exemplo.",
+      "next_review_days": 1
+    }
+  ],
+  "confidence_prompt": "Quão confiante você está para usar esta estrutura?",
+  "needs_human_review": true
+}
