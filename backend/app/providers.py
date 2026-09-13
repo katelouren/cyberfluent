@@ -10,7 +10,7 @@ from .schemas import Attempt, Feedback
 
 ROOT = Path(__file__).parent
 MISSION = json.loads((ROOT / "content/phishing.json").read_text())
-PROMPT = (ROOT / "prompts/tutor-v3.txt").read_text()
+PROMPT = (ROOT / "prompts/tutor-v4.txt").read_text()
 
 
 class ProviderUnavailable(Exception):
@@ -42,7 +42,6 @@ class OpenAITutorProvider:
                             {
                                 "mission": MISSIONS[attempt.mission_slug],
                                 "retrieval_question": retrieval(attempt.mission_slug),
-                                "context": context or {"history": []},
                             },
                             ensure_ascii=False,
                         ),
@@ -50,7 +49,12 @@ class OpenAITutorProvider:
                     {
                         "role": "user",
                         "content": json.dumps(
-                            attempt.model_dump(mode="json", exclude={"demo", "attempt_id"}),
+                            {
+                                "submission": attempt.model_dump(
+                                    mode="json", exclude={"demo", "attempt_id"}
+                                ),
+                                "untrusted_context": context or {"history": []},
+                            },
                             ensure_ascii=False,
                         ),
                     },

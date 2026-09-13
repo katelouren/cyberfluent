@@ -46,13 +46,13 @@ async function games(page: Page, slug: string) {
     .click();
   await page.getByRole("button", { name: "Continuar missão" }).click();
 }
-test("home identity and mobile layout", async ({ page }) => {
+test("home identity and mobile layout", async ({ page }, testInfo) => {
   await page.goto("/");
   await expect(page).toHaveTitle(/Cyber.fluent/);
   await page.getByRole("button", { name: /Report it through/ }).click();
   await expect(page.getByText(/Boa decisão/)).toBeVisible();
   await page.screenshot({
-    path: "docs/evidence/phase-2/home-desktop.png",
+    path: testInfo.outputPath("home-desktop.png"),
     fullPage: true,
   });
   await page.setViewportSize({ width: 390, height: 844 });
@@ -62,7 +62,7 @@ test("home identity and mobile layout", async ({ page }) => {
     ),
   ).toBe(true);
   await page.screenshot({
-    path: "docs/evidence/phase-2/home-mobile.png",
+    path: testInfo.outputPath("home-mobile.png"),
     fullPage: true,
   });
 });
@@ -73,7 +73,7 @@ for (const slug of [
 ]) {
   test(`${slug}: two games, free production, explicit demo, recall and session progress`, async ({
     page,
-  }) => {
+  }, testInfo) => {
     await demo(page);
     await games(page, slug);
     await page
@@ -95,7 +95,7 @@ for (const slug of [
         page.getByText("To não significa necessidade", { exact: false }),
       ).toBeVisible();
     await page.screenshot({
-      path: `docs/evidence/phase-2/${slug}-demo.png`,
+      path: testInfo.outputPath(`${slug}-demo.png`),
       fullPage: true,
     });
     await page.getByRole("button", { name: "Praticar sem consultar" }).click();

@@ -1,7 +1,5 @@
+import asyncio
 import os
-import re
-import time
-from collections import deque
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Annotated
@@ -29,17 +27,20 @@ from .schemas import (
     Retrieval,
     StartAttempt,
 )
+from .security import (
+    SecurityMiddleware,
+    ai_slot,
+    frontend_origin,
+    request_limiter,
+    suspicious_instruction,
+)
 from .storage import get_store, start_demo
 
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 app = FastAPI(title="Cyber.fluent API", version="0.1.0")
 live_provider = OpenAITutorProvider()
 demo_provider = DemoTutorProvider()
-requests_window: deque[float] = deque()
-INJECTION = re.compile(
-    r"(ignore|disregard).{0,40}(instructions|rules|prompt)|reveal.{0,30}(prompt|secret|key)|ignore.{0,30}(instruções|regras)|revele.{0,30}(prompt|segredo|chave)",
-    re.IGNORECASE | re.DOTALL,
-)
+requests_window = request_limiter
 
 
 @app.exception_handler(RequestValidationError)
@@ -53,36 +54,16 @@ async def validation_error(request: Request, exc: RequestValidationError):
     )
 
 
-@app.middleware("http")
-async def limits(request: Request, call_next):
-    if request.method == "POST":
-        now = time.monotonic()
-        while requests_window and requests_window[0] < now - 60:
-            requests_window.popleft()
-        if len(requests_window) >= 60:
-            return JSONResponse(
-                status_code=429, content={"detail": "Limite local atingido. Aguarde um minuto."}
-            )
-        requests_window.append(now)
-        size = 0
-        chunks = []
-        async for chunk in request.stream():
-            size += len(chunk)
-            chunks.append(chunk)
-            if size > 12000:
-                return JSONResponse(status_code=413, content={"detail": "Requisição muito grande."})
-        request._body = b"".join(chunks)
-    response = await call_next(request)
-    response.headers["Cache-Control"] = "no-store"
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    return response
-
+origin = frontend_origin(os.getenv("FRONTEND_ORIGIN", "http://localhost:3000"))
+app.add_middleware(SecurityMiddleware, origin=origin)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")],
+    allow_origins=[origin],
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type", "Authorization", "X-Demo-Session"],
+    expose_headers=["Retry-After"],
+    allow_credentials=False,
 )
 
 
@@ -162,7 +143,7 @@ async def start_attempt(attempt: StartAttempt, user: Annotated[Identity, Depends
 
 @app.post("/api/v1/tutor/feedback", response_model=Envelope)
 async def feedback(attempt: Attempt, user: Annotated[Identity, Depends(current_user)]):
-    if INJECTION.search(attempt.answer):
+    if suspicious_instruction(attempt.answer):
         raise HTTPException(
             422, "Escreva apenas uma orientação profissional para o cenário da missão."
         )
@@ -191,7 +172,12 @@ async def feedback(attempt: Attempt, user: Annotated[Identity, Depends(current_u
         "review_concepts": [r["concept_id"] for r in await store.reviews()],
     }
     try:
-        result = await (demo_provider if use_demo else live_provider).feedback(attempt, context)
+        if use_demo:
+            result = await demo_provider.feedback(attempt, context)
+        else:
+            with ai_slot(user.user_id):
+                async with asyncio.timeout(38):
+                    result = await live_provider.feedback(attempt, context)
         result.retrieval_question = Retrieval(**retrieval(attempt.mission_slug))
         # Persist only competence/error categories, not the student's prose or corrections.
         summary = {
@@ -207,10 +193,10 @@ async def feedback(attempt: Attempt, user: Annotated[Identity, Depends(current_u
         return Envelope(
             feedback=result,
             ai_mode="demo" if use_demo else "live",
-            prompt_version="tutor-v3",
+            prompt_version="tutor-v4",
             request_id=str(uuid4()),
         )
-    except (OpenAIError, ValidationError, ProviderUnavailable, ValueError):
+    except (OpenAIError, ValidationError, ProviderUnavailable, ValueError, TimeoutError):
         raise HTTPException(
             503,
             detail={

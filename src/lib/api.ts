@@ -84,16 +84,23 @@ export async function api<T = unknown>(
   path: string,
   body?: unknown,
 ): Promise<T> {
-  const response = await fetch(`${apiUrl}/api/v1/${path}`, {
-    method: body === undefined ? "GET" : "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(await sessionHeaders()),
-    },
-    cache: "no-store",
-    signal: AbortSignal.timeout(path.includes("tutor") ? 45000 : 15000),
-    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${apiUrl}/api/v1/${path}`, {
+      method: body === undefined ? "GET" : "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(await sessionHeaders()),
+      },
+      cache: "no-store",
+      signal: AbortSignal.timeout(path.includes("tutor") ? 45000 : 15000),
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    });
+  } catch {
+    throw new ApiError(
+      "Não foi possível acessar o serviço. Tente novamente; sua resposta foi preservada.",
+    );
+  }
   if (!response.ok) {
     const data = await response.json().catch(() => null);
     throw new ApiError(
@@ -103,7 +110,13 @@ export async function api<T = unknown>(
       data?.detail?.demo_available === true,
     );
   }
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    throw new ApiError(
+      "O serviço retornou uma resposta inválida. Tente novamente.",
+    );
+  }
 }
 export async function requestFeedback(
   answer: string,

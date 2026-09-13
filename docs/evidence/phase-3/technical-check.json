@@ -1,0 +1,41 @@
+{
+  "date": "2026-09-13T12:31:51.060719+00:00",
+  "branch": "feature/cyberfluent-phase-3",
+  "baseline": {
+    "python": 42,
+    "sql": 7,
+    "browser": 7
+  },
+  "final": {
+    "python": 92,
+    "sql": 7,
+    "browser": 9,
+    "live_browser": 1,
+    "eslint": "passed",
+    "typescript": "passed",
+    "prettier": "passed",
+    "ruff": "passed",
+    "ruff_format": "passed",
+    "production_build": "passed",
+    "npm_audit_known_vulnerabilities": 0,
+    "osv_python_packages_checked": 32,
+    "osv_findings": 0,
+    "git_diff_check_passed": true
+  },
+  "preservation": {
+    "protected_files": 31,
+    "changed_paths": []
+  },
+  "secret_scan": {
+    "versionable_files_scanned": 111,
+    "browser_bundle_files_scanned": 21,
+    "flagged_paths": [],
+    "credential_files_ignored_and_untracked": {
+      "backend/.env": true,
+      ".env.local": true,
+      "tests/.env.live": true
+    },
+    "passed": true
+  },
+  "staged_files": 0
+}
